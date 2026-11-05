@@ -223,7 +223,7 @@ export default function TrackShipmentSection() {
           </form>
 
           {/* Quick-test helper chip */}
-          <div className="flex items-center justify-center gap-2 mt-4 text-xs text-neutral-500">
+          {/* <div className="flex items-center justify-center gap-2 mt-4 text-xs text-neutral-500">
             <span>Quick test:</span>
             <button
               type="button"
@@ -235,7 +235,7 @@ export default function TrackShipmentSection() {
             >
               T00117102601
             </button>
-          </div>
+          </div> */}
         </div>
 
         {/* Error message */}
