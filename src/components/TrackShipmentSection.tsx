@@ -15,6 +15,7 @@ import {
   AlertCircle,
   RefreshCw,
   X,
+  Check,
 } from "lucide-react";
 
 interface DocketEvent {
@@ -56,7 +57,9 @@ export default function TrackShipmentSection() {
     setError(null);
 
     try {
-      const res = await fetch(`/api/track?tracking_no=${encodeURIComponent(num)}`);
+      const res = await fetch(
+        `/api/track?tracking_no=${encodeURIComponent(num)}`,
+      );
       if (!res.ok) {
         throw new Error("Unable to locate consignment record.");
       }
@@ -66,14 +69,15 @@ export default function TrackShipmentSection() {
         setError(
           typeof data?.[0]?.errors === "string"
             ? data[0].errors
-            : "No active shipment found with this tracking number. Please verify and try again."
+            : "No active shipment found with this tracking number. Please verify and try again.",
         );
         setResult(null);
       } else {
         setResult(data[0]);
       }
     } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : "Failed to load tracking data.";
+      const message =
+        err instanceof Error ? err.message : "Failed to load tracking data.";
       setError(message);
       setResult(null);
     } finally {
@@ -103,7 +107,7 @@ export default function TrackShipmentSection() {
             trigger: sectionRef.current,
             start: "top 75%",
           },
-        }
+        },
       );
     }, sectionRef);
 
@@ -116,7 +120,7 @@ export default function TrackShipmentSection() {
       gsap.fromTo(
         resultRef.current,
         { opacity: 0, y: 25 },
-        { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" }
+        { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" },
       );
     }
   }, [result]);
@@ -146,12 +150,12 @@ export default function TrackShipmentSection() {
       <div className="max-w-6xl mx-auto px-6 sm:px-8">
         {/* Section Header */}
         <div className="track-header text-center max-w-2xl mx-auto mb-12">
-          
           <h2 className="text-[36px] sm:text-[48px] md:text-[54px] font-bold tracking-[-0.035em] text-[#111113] leading-tight mb-4">
             Track shipment.
           </h2>
           <p className="text-[16px] sm:text-[18px] text-neutral-500 font-normal tracking-[-0.01em] leading-relaxed">
-            Enter your AWB or consignment reference to view real-time location logs, transit hubs, and proof of delivery.
+            Enter your AWB or consignment reference to view real-time location
+            logs, transit hubs, and proof of delivery.
           </p>
         </div>
 
@@ -267,11 +271,11 @@ export default function TrackShipmentSection() {
                         : "bg-blue-100 text-blue-800"
                     }`}
                   >
-                    <span
+                    {/* <span
                       className={`w-2 h-2 rounded-full ${
                         isDelivered ? "bg-emerald-600" : "bg-blue-600 animate-pulse"
                       }`}
-                    />
+                    /> */}
                     <span>{currentStatus}</span>
                   </span>
 
@@ -280,10 +284,16 @@ export default function TrackShipmentSection() {
                   </span>
                 </div>
 
-                <div className="text-[20px] sm:text-[24px] font-bold text-neutral-900 tracking-tight flex items-center gap-2">
-                  <span>{originCity ? `${originCity}, ` : ""}{origin}</span>
-                  <ArrowRight className="w-5 h-5 text-neutral-400" />
-                  <span>{destCity ? `${destCity}, ` : ""}{destination}</span>
+                <div className="text-[15px] sm:text-[20px] md:text-[24px] font-bold text-neutral-900 tracking-tight flex flex-wrap items-center gap-1.5 sm:gap-2 leading-snug">
+                  <span>
+                    {originCity ? `${originCity}, ` : ""}
+                    {origin}
+                  </span>
+                  <ArrowRight className="w-3.5 h-3.5 sm:w-5 sm:h-5 text-neutral-400 shrink-0" />
+                  <span>
+                    {destCity ? `${destCity}, ` : ""}
+                    {destination}
+                  </span>
                 </div>
               </div>
 
@@ -351,48 +361,80 @@ export default function TrackShipmentSection() {
                   </span>
                 </div>
 
-                <div className="relative pl-6 space-y-6 before:absolute before:left-2.5 before:top-2 before:bottom-2 before:w-0.5 before:bg-neutral-200">
+                <div className="relative flex flex-col gap-4">
                   {result.docket_events && result.docket_events.length > 0 ? (
-                    result.docket_events.map((evt, idx) => {
-                      const isLatest = idx === 0;
-                      return (
-                        <div key={evt.id || idx} className="relative group">
-                          {/* Dot indicator */}
+                    (() => {
+                      // Clone array before reverse to avoid mutating state
+                      const events = [...result.docket_events].reverse();
+
+                      return events.map((evt, idx) => {
+                        const isLatest = idx === 0;
+                        const isFirst = idx === 0;
+                        const isLast = idx === events.length - 1;
+
+                        return (
                           <div
-                            className={`absolute -left-[29px] top-1 w-4 h-4 rounded-full border-2 border-white transition-transform ${
-                              isLatest
-                                ? "bg-emerald-500 scale-110 shadow-xs"
-                                : "bg-neutral-400"
-                            }`}
-                          />
-
-                          <div className="bg-white p-4 rounded-2xl border border-neutral-200/70 shadow-2xs group-hover:border-neutral-300 transition-colors">
-                            <div className="flex flex-wrap items-center justify-between gap-2 mb-1">
-                              <span
-                                className={`text-[13px] font-bold tracking-tight uppercase ${
-                                  isLatest ? "text-neutral-900" : "text-neutral-700"
-                                }`}
-                              >
-                                {evt.event_description}
-                              </span>
-
-                              {evt.event_location && (
-                                <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-neutral-600 bg-neutral-100 px-2.5 py-0.5 rounded-full">
-                                  <MapPin className="w-3 h-3 text-neutral-500" />
-                                  <span>{evt.event_location}</span>
-                                </span>
+                            key={evt.id || idx}
+                            className="relative flex items-center gap-4 group"
+                          >
+                            {/* ─── 1. Indicator Column (Matches Card Height & Centers Dot) ─── */}
+                            <div className="relative w-8 shrink-0 flex items-center justify-center self-stretch">
+                              {/* Connecting Line (Only renders when there are 2+ events) */}
+                              {events.length > 1 && (
+                                <div
+                                  className={`absolute left-1/2 -translate-x-1/2 w-0.5 bg-neutral-200 ${
+                                    isFirst
+                                      ? "top-1/2 -bottom-4" // Starts at the 1st dot's center, extends downward
+                                      : isLast
+                                        ? "-top-4 bottom-1/2" // Comes from above, ends at the last dot's center
+                                        : "-top-4 -bottom-4" // Middle cards connect through
+                                  }`}
+                                />
                               )}
+
+                              {/* Dot: 100% Centered to Card */}
+                              <div
+                                className={`relative z-10 w-3.5 h-3.5 rounded-full ring-4 ring-white transition-all duration-300 ${
+                                  isLatest
+                                    ? "bg-emerald-500 scale-110 shadow-xs ring-emerald-100"
+                                    : "bg-neutral-300 group-hover:bg-neutral-400"
+                                }`}
+                              />
                             </div>
 
-                            <div className="text-xs font-mono text-neutral-400">
-                              {evt.event_at}
+                            {/* ─── 2. Event Content Card ─── */}
+                            <div className="flex-1 bg-white p-4 rounded-2xl border border-neutral-200/70 shadow-2xs group-hover:border-neutral-300 transition-colors">
+                              <div className="flex flex-wrap items-center justify-between gap-2 mb-1">
+                                <span
+                                  className={`text-[13px] font-bold tracking-tight uppercase ${
+                                    isLatest
+                                      ? "text-neutral-900"
+                                      : "text-neutral-700"
+                                  }`}
+                                >
+                                  {evt.event_description}
+                                </span>
+
+                                {evt.event_location && (
+                                  <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-neutral-600 bg-neutral-100 px-2.5 py-0.5 rounded-full">
+                                    <MapPin className="w-3 h-3 text-neutral-500" />
+                                    <span>{evt.event_location}</span>
+                                  </span>
+                                )}
+                              </div>
+
+                              <div className="text-xs font-mono text-neutral-400">
+                                {evt.event_at}
+                              </div>
                             </div>
                           </div>
-                        </div>
-                      );
-                    })
+                        );
+                      });
+                    })()
                   ) : (
-                    <div className="text-xs text-neutral-400">No events logged yet.</div>
+                    <div className="text-xs text-neutral-400 pl-4 py-2">
+                      No events logged yet.
+                    </div>
                   )}
                 </div>
               </div>
@@ -412,10 +454,16 @@ export default function TrackShipmentSection() {
                   </div>
                   <div>
                     <div className="text-sm font-semibold text-neutral-900">
-                      {infoMap["Shipper Company"] || infoMap["Shipper Name"] || "Enterprise Client"}
+                      {infoMap["Shipper Company"] ||
+                        infoMap["Shipper Name"] ||
+                        "Enterprise Client"}
                     </div>
                     <div className="text-xs text-neutral-500 mt-0.5">
-                      {[infoMap["Shipper City"], infoMap["Shipper State"], infoMap["Shipper Country"]]
+                      {[
+                        infoMap["Shipper City"],
+                        infoMap["Shipper State"],
+                        infoMap["Shipper Country"],
+                      ]
                         .filter(Boolean)
                         .join(", ")}
                     </div>
@@ -430,10 +478,16 @@ export default function TrackShipmentSection() {
                   </div>
                   <div>
                     <div className="text-sm font-semibold text-neutral-900">
-                      {infoMap["Consignee Company"] || infoMap["Consignee Name"] || "Destination Depot"}
+                      {infoMap["Consignee Company"] ||
+                        infoMap["Consignee Name"] ||
+                        "Destination Depot"}
                     </div>
                     <div className="text-xs text-neutral-500 mt-0.5">
-                      {[infoMap["Consignee City"], infoMap["Consignee State"], infoMap["Consignee Country"]]
+                      {[
+                        infoMap["Consignee City"],
+                        infoMap["Consignee State"],
+                        infoMap["Consignee Country"],
+                      ]
                         .filter(Boolean)
                         .join(", ")}
                     </div>
@@ -449,8 +503,9 @@ export default function TrackShipmentSection() {
                     </span>
                   </div>
                   <p className="text-xs text-neutral-400 leading-relaxed">
-                    This shipment is tracked using GPS telematics and authenticated dispatch scans.
-                    For delivery exceptions or proof-of-delivery (POD) queries, contact our dispatch desk.
+                    This shipment is tracked using GPS telematics and
+                    authenticated dispatch scans. For delivery exceptions or
+                    proof-of-delivery (POD) queries, contact our dispatch desk.
                   </p>
                 </div>
               </div>
