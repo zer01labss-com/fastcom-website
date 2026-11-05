@@ -365,7 +365,7 @@ export default function TrackShipmentSection() {
                   {result.docket_events && result.docket_events.length > 0 ? (
                     (() => {
                       // Clone array before reverse to avoid mutating state
-                      const events = [...result.docket_events].reverse();
+                      const events = [...result.docket_events];
 
                       return events.map((evt, idx) => {
                         const isLatest = idx === 0;
