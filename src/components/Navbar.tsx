@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { Menu, X, ArrowUpRight } from "lucide-react";
 
 export default function Navbar() {
@@ -54,24 +55,16 @@ export default function Navbar() {
           <div className="flex justify-center">
             <Link
               href="/"
-              className="flex flex-col items-center justify-center group cursor-pointer select-none"
+              className="flex items-center justify-center group cursor-pointer select-none"
             >
-              <div className="flex items-center gap-1.5 mb-0.5">
-                <svg
-                  width="26"
-                  height="22"
-                  viewBox="0 0 28 24"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="text-black transform group-hover:scale-105 transition-transform duration-200"
-                >
-                  <path d="M10 2L2 22H7L15 2H10Z" fill="currentColor" />
-                  <path d="M21 2L13 22H18L26 2H21Z" fill="currentColor" />
-                </svg>
-              </div>
-              <span className="text-[12px] font-black tracking-[0.22em] uppercase text-black">
-                FASTCOM
-              </span>
+              <Image
+                src="/fastcom-logo.png"
+                alt="Fastcom Logo"
+                width={200}
+                height={58}
+                priority
+                className="h-10 w-auto object-contain transform group-hover:scale-[1.02] transition-transform duration-200"
+              />
             </Link>
           </div>
 
@@ -95,21 +88,15 @@ export default function Navbar() {
         {/* ─── Mobile View (Flex Layout) ─── */}
         <div className="flex md:hidden items-center justify-between">
           {/* Mobile Logo */}
-          <Link href="/" className="flex items-center gap-2">
-            <svg
-              width="22"
-              height="18"
-              viewBox="0 0 28 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-              className="text-black"
-            >
-              <path d="M10 2L2 22H7L15 2H10Z" fill="currentColor" />
-              <path d="M21 2L13 22H18L26 2H21Z" fill="currentColor" />
-            </svg>
-            <span className="text-[12px] font-black tracking-[0.2em] uppercase text-black">
-              FASTCOM
-            </span>
+          <Link href="/" className="flex items-center">
+            <Image
+              src="/fastcom-logo.png"
+              alt="Fastcom Logo"
+              width={160}
+              height={50}
+              priority
+              className="h-8.5 sm:h-9.5 w-auto object-contain"
+            />
           </Link>
 
           {/* Mobile Actions */}

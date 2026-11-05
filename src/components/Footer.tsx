@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { Globe } from "lucide-react";
 
 export default function Footer() {
@@ -10,21 +11,14 @@ export default function Footer() {
         {/* Brand & Description Side-by-Side */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-5 pb-6 border-b border-neutral-100">
           <div className="flex flex-col sm:flex-row sm:items-center gap-3.5 sm:gap-5">
-            <Link href="/" className="inline-flex items-center gap-2 group shrink-0">
-              <svg
-                width="24"
-                height="20"
-                viewBox="0 0 28 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-                className="text-black"
-              >
-                <path d="M10 2L2 22H7L15 2H10Z" fill="currentColor" />
-                <path d="M21 2L13 22H18L26 2H21Z" fill="currentColor" />
-              </svg>
-              <span className="text-[13px] font-extrabold tracking-[0.22em] uppercase text-black">
-                FASTCOM CARGO
-              </span>
+            <Link href="/" className="inline-flex items-center group shrink-0">
+              <Image
+                src="/fastcom-logo.png"
+                alt="Fastcom Logo"
+                width={200}
+                height={60}
+                className="h-9 sm:h-10 w-auto object-contain"
+              />
             </Link>
 
             <span className="hidden sm:inline-block w-px h-3.5 bg-neutral-200" />
