@@ -11,14 +11,14 @@ const courierServices = [
     title: "Worldwide delivery.",
     description:
       "Cross-continental air freight and maritime corridors connecting 220+ countries with sub-day customs dispatch.",
-    image: "/Wireframe Jet in Flight.png",
+    image: "/Wireframe Globe with Orbit and Parcels.png",
   },
   {
     id: "international",
     title: "International courier.",
     description:
       "Expedited cross-border courier lanes with automated tariff clearance, priority flight holds, and instant customs handoffs.",
-    image: "/Wireframe Globe with Orbit and Parcels.png",
+    image: "/Wireframe Jet in Flight.png",
   },
   {
     id: "secure",
